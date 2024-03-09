@@ -1,0 +1,44 @@
+LIBRARY IEEE;
+  USE IEEE.STD_LOGIC_1164.ALL;
+  ENTITY prac2 IS
+	PORT (CLK,CLR,T,D : IN STD_LOGIC;
+	      Q,NQ: INOUT STD_LOGIC;
+			SEL: IN std_LOGIC_vector(1 downto 0);
+			CLKIN: IN STD_LOGIC;
+			CLKOUT: INOUT STD_LOGIC
+	      
+	
+	);
+	END ENTITY;
+	
+	ARCHITECTURE a_P2 OF prac2 IS
+	BEGIN
+	
+	PROCESS (CLR,D,CLKOUT,T,SEL,CLK)
+	
+	BEGIN
+	
+	IF (CLR='0')THEN
+	Q<='0';
+	NQ<='1';
+	
+	--ELSIF (CLKOUT'EVENT AND CLKOUT) THEN
+	
+	ELSIF    (CLK'EVENT AND CLK='1') THEN
+	CASE SEL IS
+	WHEN "00" => Q<= D;
+	       NQ<=NOT D;
+			 
+	WHEN "01" => Q <= ((NOT T) AND Q)	 OR (D AND (NOT Q));
+	             NQ<= NOT ( ((NOT T) AND Q)	 OR (D AND (NOT Q)));  
+	WHEN "10" => Q <= D OR ((NOT T)  AND  Q);
+	             NQ <= NOT (D OR ((NOT T)  AND  Q));
+	WHEN OTHERS => Q <= ((NOT D) AND Q) OR (D AND (NOT (Q)));
+	             NQ <= NOT (((NOT D) AND Q) OR (D AND (NOT (Q))));
+
+					 
+					 
+					 END CASE;
+	END IF;
+	END PROCESS;
+	END a_P2;
